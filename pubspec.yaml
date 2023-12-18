@@ -12,6 +12,7 @@ environment:
   flutter: ">=3.10.0"
 
 dependencies:
+  firebase_auth: ^4.15.3
   flutter:
     sdk: flutter
 
