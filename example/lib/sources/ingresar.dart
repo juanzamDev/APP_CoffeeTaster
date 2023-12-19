@@ -37,10 +37,11 @@ class _SignupFormState extends State<Ingresar> {
       builder: (BuildContext context) {
         return BackdropFilter(
           filter: ImageFilter.blur(
-              sigmaX: 2.0,
-              sigmaY: 2.0), // Ajusta este valor según tus necesidades
+            sigmaX: 2.0,
+            sigmaY: 2.0,
+          ),
           child: FractionallySizedBox(
-            heightFactor: 0.65, // Ajusta este valor según tus necesidades
+            heightFactor: 0.65,
             child: Container(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -60,10 +61,11 @@ class _SignupFormState extends State<Ingresar> {
       builder: (BuildContext context) {
         return BackdropFilter(
           filter: ImageFilter.blur(
-              sigmaX: 2.0,
-              sigmaY: 2.0), // Ajusta este valor según tus necesidades
+            sigmaX: 2.0,
+            sigmaY: 2.0,
+          ),
           child: FractionallySizedBox(
-            heightFactor: 0.8, // Ajusta este valor según tus necesidades
+            heightFactor: 0.8,
             child: Container(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -119,10 +121,6 @@ class _SignupFormState extends State<Ingresar> {
                       color: Colors.green,
                       onPressed: () {
                         _sigIn();
-                        /* Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );*/
                       },
                       child: const Text(
                         'Iniciar sesión',
@@ -153,9 +151,17 @@ class _SignupFormState extends State<Ingresar> {
     if (user != null) {
       print("El usuario ha ingresado correctamente");
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Home()));
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+      );
     } else {
-      print("Ha ocurrido un error");
+      print("Contraseña o usuario incorrecto");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Contraseña o usuario incorrecto'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
   }
 }

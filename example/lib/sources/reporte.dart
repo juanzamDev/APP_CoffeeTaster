@@ -53,9 +53,10 @@ class _ReporteState extends State<Reporte> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Row(
           children: [
-            const Text('Reporte'),
+            Text("Reporte", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Image.asset(
               'assets/sennova.png',

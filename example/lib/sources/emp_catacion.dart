@@ -25,6 +25,7 @@ class _CompleteFormState extends State<EmpCatacion> {
   TextEditingController loController = TextEditingController(text: "");
   TextEditingController numController = TextEditingController(text: "");
   TextEditingController typeController = TextEditingController(text: "");
+  bool addTaster = true; // Variable para controlar el estado del switch
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
 
@@ -32,7 +33,9 @@ class _CompleteFormState extends State<EmpCatacion> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             FormBuilder(
               key: _formKey,
@@ -54,28 +57,34 @@ class _CompleteFormState extends State<EmpCatacion> {
                   FormBuilderTextField(
                     controller: nameController,
                     name: 'full_name',
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nombre de la sesión',
+                      border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
                   ),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     controller: desController,
                     name: 'descripcion',
-                    decoration: const InputDecoration(
+                    maxLines: 3,
+                    decoration: InputDecoration(
                       labelText: 'Descripción de la sesión',
+                      border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
                   ),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     controller: loController,
                     name: 'ciudad',
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Localización',
+                      border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
@@ -90,23 +99,17 @@ class _CompleteFormState extends State<EmpCatacion> {
                     onChanged: _onChanged,
                     decoration: InputDecoration(
                       labelText: 'Rango de fecha',
-                      helperText: '',
-                      hintText: 'Hint text',
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          _formKey.currentState!.fields['date_range']
-                              ?.didChange(null);
-                        },
-                      ),
+                      border: OutlineInputBorder(),
                     ),
                   ),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     controller: numController,
                     autovalidateMode: AutovalidateMode.always,
                     name: 'num_muestra',
                     decoration: InputDecoration(
-                      labelText: 'Numero de muestras',
+                      labelText: 'Número de muestras',
+                      border: OutlineInputBorder(),
                       suffixIcon: _ageHasError
                           ? const Icon(Icons.error, color: Colors.red)
                           : const Icon(Icons.check, color: Colors.green),
@@ -120,22 +123,37 @@ class _CompleteFormState extends State<EmpCatacion> {
                       });
                     },
                     validator: FormBuilderValidators.compose([
-                      //FormBuilderValidators.required(),
                       FormBuilderValidators.numeric(),
                       FormBuilderValidators.max(70),
                     ]),
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                   ),
-                  FormBuilderSwitch(
-                    title: const Text('Agregar catadores'),
-                    name: 'addTaster',
-                    initialValue: true,
-                    onChanged: _onChanged,
+                  const SizedBox(height: 15),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Agregar catadores',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(width: 10),
+                      Switch(
+                        value: addTaster,
+                        onChanged: (value) {
+                          setState(() {
+                            addTaster = value;
+                          });
+                        },
+                        activeTrackColor: Colors.green,
+                        activeColor: Colors.green,
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 15),
                   FormBuilderRadioGroup<String>(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Tipo de muestra',
+                      border: OutlineInputBorder(),
                     ),
                     name: 'sampleType',
                     orientation: OptionsOrientation.horizontal,
@@ -149,13 +167,11 @@ class _CompleteFormState extends State<EmpCatacion> {
                         .toList(),
                     onChanged: (String? selected) {
                       if (selected != null) {
-                        // Process the selected option
                         debugPrint("Selected: $selected");
-                        // Puedes incluir lógica aquí para manejar la opción seleccionada
                       }
                     },
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -167,7 +183,6 @@ class _CompleteFormState extends State<EmpCatacion> {
                       if (_formKey.currentState?.saveAndValidate() ?? false) {
                         debugPrint(_formKey.currentState?.value.toString());
 
-                        // Llama a addCatacion y obtén el catacionId
                         String catacionId = await addCatacion(
                           nameController.text,
                           desController.text,
@@ -175,7 +190,6 @@ class _CompleteFormState extends State<EmpCatacion> {
                           numController.text,
                         );
 
-                        // Ahora puedes pasar el catacionId a InforMuestra
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -207,6 +221,9 @@ class _CompleteFormState extends State<EmpCatacion> {
                       'Reiniciar',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.green),
                     ),
                   ),
                 ),

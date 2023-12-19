@@ -14,13 +14,15 @@ class CodePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white), // Cambia el color del botón de retroceso
         title: Row(
           children: [
-            Text(title),
-            const Spacer(), // Esto añade un espacio flexible entre el título y la imagen
+            Text(title, style: TextStyle(color: Colors.white)),
+            const Spacer(),
             Image.asset(
               'assets/sennova.png',
-              height: 30, // Ajusta la altura según tu necesidad
+              height: 30,
             ),
           ],
         ),

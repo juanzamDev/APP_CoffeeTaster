@@ -64,9 +64,10 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Row(
           children: [
-            const Text('Coffee Taster'),
+            Text("Coffee Taster", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Image.asset(
               'assets/sennova.png',
@@ -92,25 +93,12 @@ class Home extends StatelessWidget {
               ),
             ),
             // Opciones del Drawer
+
             ListTile(
-              title: const Text('Opción 1'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MyApp()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Opción 2'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MyApp()),
-                );
-              },
-            ),
-            // ... Agrega más opciones según sea necesario
-            ListTile(
-              title: const Text('Salir'),
+              title: Text(
+                'Salir',
+                style: TextStyle(color: Colors.red),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MyApp()),
