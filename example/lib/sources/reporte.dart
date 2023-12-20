@@ -303,6 +303,19 @@ class _ReporteState extends State<Reporte> {
             (data['Dulzura']?.toDouble() ?? 0.0) -
             puntajeDefecto;
 
+            void _actualizarPuntajeTotal(double puntajeTotal) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('cataciones')
+        .doc(widget.catacionId)
+        .update({'puntajeTotal': puntajeTotal});
+    print('Puntaje total actualizado en Firestore');
+  } catch (e) {
+    print('Error al actualizar el puntaje total: $e');
+  }
+}
+
+
         setState(() {
           reportData = [
             {'Categoria': 'Fragancia', 'Valor': data['puntaje_frag'] ?? ''},
