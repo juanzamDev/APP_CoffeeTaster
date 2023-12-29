@@ -26,4 +26,8 @@ class FirebaseAuthService {
     }
     return null;
   }
+
+  Future<void> setSessionPersistence() async {
+    await _auth.setPersistence(Persistence.SESSION);
+  }
 }

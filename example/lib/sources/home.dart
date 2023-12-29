@@ -3,6 +3,7 @@ import '../code_page.dart';
 import 'emp_catacion.dart';
 import 'consulta_reporte.dart';
 import '../main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -93,15 +94,18 @@ class Home extends StatelessWidget {
               ),
             ),
             // Opciones del Drawer
-
             ListTile(
               title: Text(
                 'Salir',
                 style: TextStyle(color: Colors.red),
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MyApp()),
+              onTap: () async {
+                // Cierra la sesión del usuario
+                await FirebaseAuth.instance.signOut();
+
+                // Navega a la pantalla de inicio de sesión
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => MyApp()),
                 );
               },
             ),

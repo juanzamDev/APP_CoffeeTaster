@@ -1,11 +1,17 @@
 import 'dart:ui';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:example/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    home: Ingresar(),
+  ));
+}
 
 class Ingresar extends StatefulWidget {
   const Ingresar({Key? key}) : super(key: key);
@@ -17,13 +23,12 @@ class Ingresar extends StatefulWidget {
 class _SignupFormState extends State<Ingresar> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
+  bool _obscureText = true;
 
-  final FirebaseAuthService _auth = FirebaseAuthService();
-
+  //Controllers
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -102,8 +107,20 @@ class _SignupFormState extends State<Ingresar> {
                 FormBuilderTextField(
                   controller: _passwordController,
                   name: 'password',
-                  decoration: const InputDecoration(labelText: 'Contraseña'),
-                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: _obscureText,
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                     FormBuilderValidators.minLength(6),
@@ -146,22 +163,40 @@ class _SignupFormState extends State<Ingresar> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    User? user = await _auth.signInWithEmailAndPassword(email, password);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    if (user != null) {
-      print("El usuario ha ingresado correctamente");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
-    } else {
-      print("Contraseña o usuario incorrecto");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Contraseña o usuario incorrecto'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      // Verifica si el inicio de sesión fue exitoso
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        print("El usuario ha ingresado correctamente");
+
+        Fluttertoast.showToast(
+          msg: 'Bienvenido a Coffee Taster!.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      } else {
+        print("Contraseña o usuario incorrecto");
+        Fluttertoast.showToast(
+          msg: 'Contraseña o usuario incorrecto, intenta de nuevo.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+        );
+      }
+    } catch (e) {
+      print("Error durante el inicio de sesión: $e");
+      // Manejar errores, como mostrar un mensaje al usuario
     }
   }
 }
@@ -207,8 +242,6 @@ class _ForgotPasswordModalState extends State<ForgotPasswordModal> {
             onPressed: () {
               if (_formKey.currentState?.validate() ?? false) {
                 // Aquí puedes implementar la lógica para enviar el correo de recuperación
-                final email = _emailController.text;
-                // ...
 
                 // Cierra el modal
                 Navigator.pop(context);
@@ -229,7 +262,6 @@ class RegisterModal extends StatefulWidget {
 
 class _RegisterModalState extends State<RegisterModal> {
   final FirebaseAuthService _auth = FirebaseAuthService();
-
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -314,16 +346,18 @@ class _RegisterModalState extends State<RegisterModal> {
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
     if (user != null) {
-      print("El usuario ha sido registrado");
-      Navigator.pushNamed(context, "/home");
+      print("El usuario ha sido registrado exitosamente");
+
+      Fluttertoast.showToast(
+        msg: 'Registro exitoso. Puedes iniciar sesión ahora.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+      );
+
+      // Navigator.pushNamed(context, "/login");
     } else {
-      print("Ha ocurrido un error");
+      print("Ha ocurrido un error durante el registro");
     }
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: Ingresar(),
-  ));
 }

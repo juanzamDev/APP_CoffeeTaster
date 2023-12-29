@@ -40,17 +40,9 @@ class _CompleteFormState extends State<InforMuestra> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const SizedBox(height: 20),
             FormBuilder(
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
-              initialValue: {
-                'movie_rating': 5,
-                'best_language': 'Dart',
-                'age': '0',
-                'gender': 'Male',
-                'languages_filter': ['Dart']
-              },
               skipDisabled: true,
               child: Column(
                 children: <Widget>[
