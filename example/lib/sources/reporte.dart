@@ -427,8 +427,6 @@ class _ReporteState extends State<Reporte> {
                 (data['sabor_moho'] == true ? valorDefecto : 0.0) +
                 (data['sabor_sucio'] == true ? valorDefecto : 0.0);
 
-        print('Puntaje Defecto: $puntajeDefecto');
-
         double puntajeTotal = ((data['puntaje_frag']?.toDouble() ?? 0.0) +
                 (data['puntaje_acid']?.toDouble() ?? 0.0) +
                 (data['puntaje_cuerpo']?.toDouble() ?? 0.0) +
@@ -441,20 +439,23 @@ class _ReporteState extends State<Reporte> {
                 (data['dulzura']?.toDouble() ?? 0.0)) -
             puntajeDefecto;
 
-        print('Puntaje Total Antes de la Resta: $puntajeTotal');
-
-        void _actualizarPuntajeTotal(double puntajeTotal) async {
+        void _guardarPuntajeTotal(double puntajeTotal) async {
           try {
+            // Save the calculated value in Firestore
             await FirebaseFirestore.instance
                 .collection('cataciones')
                 .doc(widget.catacionId)
-                .update({'puntajeTotal': puntajeTotal});
-            print('Puntaje total actualizado en Firestore');
+                .set({'puntajeTotal': puntajeTotal}, SetOptions(merge: true));
+            print('Puntaje total guardado en Firestore');
           } catch (e) {
-            print('Error al actualizar el puntaje total: $e');
+            print('Error al guardar el puntaje total: $e');
           }
         }
 
+        // Calling guardarPuntajeTotal Function
+        _guardarPuntajeTotal(puntajeTotal);
+
+        // Tabla del reporte
         setState(() {
           reportData = [
             {'Categoria': 'Tueste', 'Valor': data['tueste'] ?? ''},
