@@ -15,22 +15,19 @@ class Catacion {
   });
 }
 
-class ReportePdf extends StatefulWidget {
-  const ReportePdf({Key? key}) : super(key: key);
+class Reportes extends StatefulWidget {
+  const Reportes({Key? key}) : super(key: key);
 
   @override
   _ReportePdfState createState() => _ReportePdfState();
 }
 
-class _ReportePdfState extends State<ReportePdf> {
+class _ReportePdfState extends State<Reportes> {
   List<Catacion> cataciones = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("PDF'S"),
-      ),
       body: FutureBuilder<List<Catacion>>(
         future: getCatacionesFromFirebase(),
         builder: (context, snapshot) {
@@ -49,7 +46,7 @@ class _ReportePdfState extends State<ReportePdf> {
                 return _buildOptionTile(
                   title: '${catacion.nameSample} - ${catacion.provider}',
                   subtitle: 'Puntaje: ${catacion.puntaje ?? "No registrado"}',
-                  icon: Icons.picture_as_pdf,
+                  icon: Icons.assignment,
                   onTap: () {
                     // Aquí debes implementar la lógica para descargar o abrir el PDF
                     // Puedes utilizar alguna librería o método para realizar esta acción
@@ -80,7 +77,7 @@ class _ReportePdfState extends State<ReportePdf> {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(subtitle),
-        trailing: const Icon(Icons.download),
+        trailing: const Icon(Icons.coffee),
         onTap: onTap,
       ),
     );
@@ -93,9 +90,9 @@ class _ReportePdfState extends State<ReportePdf> {
       return querySnapshot.docs.map((doc) {
         return Catacion(
           id: doc.id,
-          nameSample: doc['nameSample'],
+          nameSample: doc['name'],
           provider: doc['provider'],
-          puntaje: doc['puntaje']?.toDouble(),
+          puntaje: doc['puntajeTotal']?.toDouble(),
         );
       }).toList();
     } catch (e) {
@@ -107,6 +104,6 @@ class _ReportePdfState extends State<ReportePdf> {
 
 void main() {
   runApp(const MaterialApp(
-    home: ReportePdf(),
+    home: Reportes(),
   ));
 }

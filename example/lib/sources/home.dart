@@ -1,7 +1,8 @@
+import 'package:example/sources/acerca_de.dart';
 import 'package:flutter/material.dart';
 import '../code_page.dart';
 import 'emp_catacion.dart';
-import 'consulta_reporte.dart';
+import 'reportes.dart';
 import '../main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -81,23 +82,165 @@ class Home extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.green,
               ),
-              child: Text(
-                'SENNOVA',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/logosenab.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'SENNOVA',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
               ),
             ),
-            // Opciones del Drawer
+            // Options
             ListTile(
-              title: Text(
-                'Salir',
-                style: TextStyle(color: Colors.red),
+              title: Row(
+                children: [
+                  Text(
+                    'Proximamente:',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.apple,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'App para IOS',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Editar perfil catador',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.table_bar,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Añadir catadores a la mesa',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.picture_as_pdf,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Descarga de reportes por ID',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.coffee,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Varias cataciones al tiempo',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.table_chart,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Más formatos de catacación',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 200),
+            Divider(), // Agrega una línea divisoria antes del botón de salir
+            ListTile(
+              title: Row(
+                children: [
+                  SizedBox(width: 40),
+                  GestureDetector(
+                    onTap: () {
+                      // Navega a la pantalla "Acerca de"
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => AcercaDe()),
+                      );
+                    },
+                    child: Text(
+                      'Acerca de',
+                      style: TextStyle(
+                          color: Colors
+                              .blue), // Cambia el color según tus preferencias
+                    ),
+                  ),
+                  SizedBox(width: 48),
+                  Text(
+                    'Salir',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.exit_to_app,
+                    color: Colors.red,
+                  ),
+                ],
               ),
               onTap: () async {
                 // Cierra la sesión del usuario
@@ -114,7 +257,7 @@ class Home extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          const Divider(),
+          SizedBox(height: 50),
           _buildOptionTile(
             title: 'Empezar catación',
             subtitle: 'Inicia una nueva catación',
@@ -133,23 +276,22 @@ class Home extends StatelessWidget {
             },
             logoPath: 'assets/coffee.png',
           ),
-          const Divider(),
+          SizedBox(height: 8),
           _buildOptionTile(
-            title: 'Consultar Reportes',
-            subtitle: 'Ver informes y estadísticas',
+            title: 'Ver mis cataciones',
+            subtitle: 'Resumen de las cataciónes',
             icon: Icons.report,
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
                   return const CodePage(
-                    title: 'Empezar',
-                    child: ConsultaReporte(),
+                    title: 'Mis cataciones',
+                    child: Reportes(),
                   );
                 },
               ));
             },
-            logoPath:
-                'assets/consulta_reporte.png', // Cambia la ruta del logotipo según sea necesario
+            logoPath: 'assets/consulta_reporte.png',
           ),
         ],
       ),
