@@ -93,10 +93,7 @@ class SplashScreen extends StatelessWidget {
 class _IngresarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const CodePage(
-      title: 'Ingresar',
-      child: Ingresar(),
-    );
+    return Ingresar();
   }
 }
 

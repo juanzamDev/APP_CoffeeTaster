@@ -1,4 +1,5 @@
 import 'package:example/sources/acerca_de.dart';
+import 'package:example/sources/ingresar.dart';
 import 'package:flutter/material.dart';
 import '../code_page.dart';
 import 'emp_catacion.dart';
@@ -203,7 +204,7 @@ class Home extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    'Más formatos de catacación',
+                    'Más formatos de catación',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -211,7 +212,7 @@ class Home extends StatelessWidget {
             ),
 
             SizedBox(height: 200),
-            Divider(), // Agrega una línea divisoria antes del botón de salir
+            Divider(),
             ListTile(
               title: Row(
                 children: [
@@ -225,9 +226,7 @@ class Home extends StatelessWidget {
                     },
                     child: Text(
                       'Acerca de',
-                      style: TextStyle(
-                          color: Colors
-                              .blue), // Cambia el color según tus preferencias
+                      style: TextStyle(color: Colors.blue),
                     ),
                   ),
                   SizedBox(width: 48),
@@ -248,7 +247,7 @@ class Home extends StatelessWidget {
 
                 // Navega a la pantalla de inicio de sesión
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(builder: (context) => Ingresar()),
                 );
               },
             ),

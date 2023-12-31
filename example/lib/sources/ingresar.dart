@@ -86,77 +86,96 @@ class _SignupFormState extends State<Ingresar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: FormBuilder(
-            key: _formKey,
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                FormBuilderTextField(
-                  controller: _emailController,
-                  key: _emailFieldKey,
-                  name: 'email',
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.email(),
-                  ]),
-                ),
-                const SizedBox(height: 10),
-                FormBuilderTextField(
-                  controller: _passwordController,
-                  name: 'password',
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: _obscureText,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.minLength(6),
-                  ]),
-                ),
-                const SizedBox(height: 10),
-                Row(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Row(
+            children: [
+              Text("Inicia sesión", style: TextStyle(color: Colors.white)),
+              const Spacer(),
+              Image.asset(
+                'assets/sennova.png',
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () => _showForgotPasswordModal(context),
-                      child: const Text('¿Olvidaste tu contraseña?'),
+                    const SizedBox(height: 10),
+                    FormBuilderTextField(
+                      controller: _emailController,
+                      key: _emailFieldKey,
+                      name: 'email',
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.email(),
+                      ]),
                     ),
-                    const Spacer(),
-                    MaterialButton(
-                      color: Colors.green,
-                      onPressed: () {
-                        _sigIn();
-                      },
-                      child: const Text(
-                        'Iniciar sesión',
-                        style: TextStyle(color: Colors.white),
+                    const SizedBox(height: 10),
+                    FormBuilderTextField(
+                      controller: _passwordController,
+                      name: 'password',
+                      decoration: InputDecoration(
+                        labelText: 'Contraseña',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                       ),
+                      obscureText: _obscureText,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(6),
+                      ]),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () => _showForgotPasswordModal(context),
+                          child: const Text('¿Olvidaste tu contraseña?'),
+                        ),
+                        const Spacer(),
+                        MaterialButton(
+                          color: Colors.green,
+                          onPressed: () {
+                            _sigIn();
+                          },
+                          child: const Text(
+                            'Iniciar sesión',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () => _showRegisterModal(context),
+                      child: const Text(
+                          '¿No tienes una cuenta? ¡Regístrate aquí!'),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                TextButton(
-                  onPressed: () => _showRegisterModal(context),
-                  child: const Text('¿No tienes una cuenta? ¡Regístrate aquí!'),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   void _sigIn() async {
@@ -171,11 +190,12 @@ class _SignupFormState extends State<Ingresar> {
 
       // Verifica si el inicio de sesión fue exitoso
       User? currentUser = FirebaseAuth.instance.currentUser;
+
       if (currentUser != null) {
         print("El usuario ha ingresado correctamente");
 
         Fluttertoast.showToast(
-          msg: 'Bienvenido a Coffee Taster!.',
+          msg: 'Bienvenido a Coffee Taster!',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2,
@@ -185,18 +205,14 @@ class _SignupFormState extends State<Ingresar> {
           context,
           MaterialPageRoute(builder: (context) => const Home()),
         );
-      } else {
-        print("Contraseña o usuario incorrecto");
-        Fluttertoast.showToast(
-          msg: 'Contraseña o usuario incorrecto, intenta de nuevo.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2,
-        );
       }
     } catch (e) {
-      print("Error durante el inicio de sesión: $e");
-      // Manejar errores, como mostrar un mensaje al usuario
+      Fluttertoast.showToast(
+        msg: 'Usuario o contraseña incorrecto, intenta de nuevo',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+      );
     }
   }
 }
@@ -239,12 +255,34 @@ class _ForgotPasswordModalState extends State<ForgotPasswordModal> {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState?.validate() ?? false) {
-                // Aquí puedes implementar la lógica para enviar el correo de recuperación
+                try {
+                  // Enviar correo de recuperación
+                  await FirebaseAuth.instance
+                      .sendPasswordResetEmail(email: _emailController.text);
 
-                // Cierra el modal
-                Navigator.pop(context);
+                  // Informar al usuario que se envió el correo
+                  Fluttertoast.showToast(
+                    msg:
+                        'Si ${_emailController.text} está registrado. Por favor, revisa tu correo.',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 2,
+                  );
+
+                  // Cierra el modal
+                  Navigator.pop(context);
+                } catch (e) {
+                  // Manejar errores, por ejemplo, si el correo no está registrado
+                  print('Error al enviar el correo de recuperación: $e');
+                  Fluttertoast.showToast(
+                    msg: 'Por favor, verifica tu dirección de email.',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 2,
+                  );
+                }
               }
             },
             child: const Text('Enviar'),
