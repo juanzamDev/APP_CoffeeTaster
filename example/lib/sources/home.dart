@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../code_page.dart';
 import 'emp_catacion.dart';
 import 'reportes.dart';
-import '../main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatelessWidget {
